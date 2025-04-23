@@ -8,7 +8,7 @@ def plain_wrap(prompt: str, _: List) -> str:
     return prompt
 
 def list_only_wrap(prompt: str, _: List) -> str:
-    return f"{prompt}\nOnly output a list, no other information.\nList:"
+    return f"{prompt}\nOnly output a list, no other information.\nList: ["
 
 def python_interpreter_wrap(prompt: str, inputs: List) -> str:
     return (
