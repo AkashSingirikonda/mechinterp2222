@@ -17,7 +17,7 @@ def python_interpreter_wrap(prompt: str, inputs: List) -> str:
         f"INPUT: {inputs}\n"
         f"OUTPUT:"
     )
-
+ 
 def system_message_wrap(prompt: str, _: List) -> str:
     return f"<|system|> You are a helpful assistant.\n<|user|> {prompt}\n<|assistant|>"
 

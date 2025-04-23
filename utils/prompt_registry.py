@@ -57,6 +57,19 @@ SWAP_INDICES_PROMPT = Prompt(
     random_input_fn=None,
 )
 
+FIND_INDEX_PROMPT = Prompt(
+    name="find_index",
+    prompt_fn=lambda inp: (
+        f"Given a {inp[2]} indexed list {inp[0]}, what is the index of the element {inp[1]}?"
+    ),
+    transform_fn=lambda inp: (
+        inp[0].index(inp[1]) + (1 if inp[2] == "one" else 0)
+        if inp[1] in inp[0]
+        else "Not Found"
+    ),
+    random_input_fn=None,
+)
+
 
 LIST_PROMPTS = [
     PRINT_PROMPT,
@@ -64,6 +77,7 @@ LIST_PROMPTS = [
     ADD_ALL_PROMPT,
     INSERT_MIDDLE_PROMPT,
     SWAP_INDICES_PROMPT,
+    FIND_INDEX_PROMPT,
 ]
 
 PROMPT_REGISTRY = {

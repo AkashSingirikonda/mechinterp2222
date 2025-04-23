@@ -15,6 +15,7 @@ class ListPromptFamily(PromptFamily):
         append_min: int = 0,
         append_max: int = 20,
         index_range: int = None,
+        fill_mode: bool = "random" # "random", "uniform", "single_outlier"
     ):
         self.min_val = min_val
         self.max_val = max_val
@@ -22,9 +23,26 @@ class ListPromptFamily(PromptFamily):
         self.append_min = append_min
         self.append_max = append_max
         self.index_range = list_size if index_range is None else index_range
+        self.fill_mode = fill_mode
 
         def rand_list():
-            return np.random.randint(self.min_val, self.max_val, size=self.list_size).tolist()
+            if self.fill_mode == "random":
+                return np.random.randint(self.min_val, self.max_val, size=self.list_size).tolist()
+
+            elif self.fill_mode == "uniform":
+                fill_val = np.random.randint(self.min_val, self.max_val)
+                return [fill_val] * self.list_size
+
+            elif self.fill_mode == "single_outlier":
+                fill_val = np.random.randint(self.min_val, self.max_val)
+                outlier_val = fill_val
+                while outlier_val == fill_val:
+                    outlier_val = np.random.randint(self.min_val, self.max_val)
+
+                lst = [fill_val] * self.list_size
+                idx = np.random.randint(self.list_size)
+                lst[idx] = outlier_val
+                return lst
 
         # Clone and inject random_input_fn into each Prompt
         prompt_templates = PROMPT_REGISTRY["list"]
@@ -60,13 +78,36 @@ class ListPromptFamily(PromptFamily):
                 if indexing == "zero":
                     i1 = np.random.randint(0, len(lst))
                     i2 = np.random.randint(0, len(lst))
-                else:  # one-indexed (1 to len inclusive)
+                else:
                     i1 = np.random.randint(1, len(lst) + 1)
                     i2 = np.random.randint(1, len(lst) + 1)
 
                 return [lst, i1, i2, indexing]
 
             return make_swap_inputs
+        
+        elif name == "find_index":
+            def make_find_index_inputs():
+                lst = rand_list_fn()
+                indexing = np.random.choice(["zero", "one"])
+
+                if self.fill_mode == "single_outlier":
+                    counts = {val: lst.count(val) for val in lst}
+                    outlier_val = next(val for val, count in counts.items() if count == 1)
+                    return [lst, outlier_val, indexing]
+
+                else:
+                    if np.random.rand() < 0.8 and lst:
+                        target = np.random.choice(lst)
+                    else:
+                        target = np.random.randint(self.min_val, self.max_val)
+                        while target in lst:
+                            target = np.random.randint(self.min_val, self.max_val)
+
+                    return [lst, target, indexing]
+
+            return make_find_index_inputs
+
 
         else:
             raise ValueError(f"Unrecognized prompt name: {name}")
