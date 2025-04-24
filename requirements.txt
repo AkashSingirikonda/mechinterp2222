@@ -8,3 +8,4 @@ matplotlib>=3.4.0
 git+https://github.com/neelnanda-io/neel-plotly.git
 circuitvis
 protobuf==3.20.*
+seaborn
