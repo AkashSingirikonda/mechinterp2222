@@ -50,7 +50,7 @@ def safe_swap_transform(inp):
 SWAP_INDICES_PROMPT = Prompt(
     name="swap_indices",
     prompt_fn=lambda inp: (
-        f"Given a {inp[3]} indexed list, {inp[0]}, "
+        f"Given a {inp[3]}-based indexed list, {inp[0]}, "
         f"what would the list be if you swapped the elements at position {inp[1]} and {inp[2]}?"
     ),
     transform_fn=safe_swap_transform,
