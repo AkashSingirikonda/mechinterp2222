@@ -6,3 +6,5 @@ ollama>=0.1.0
 tqdm>=4.62.0
 matplotlib>=3.4.0
 git+https://github.com/neelnanda-io/neel-plotly.git
+circuitvis
+protobuf==3.20.*
