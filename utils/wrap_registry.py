@@ -9,7 +9,7 @@ def list_only_wrap(prompt: str, _: List) -> str:
     return f"{prompt}\nOnly output a list, no other information.\nList: ["
 
 def answer_only_wrap(prompt: str, _: List) -> str:
-    return f"{prompt}\nOnly output the answer, no other information.\ ANSWER: "
+    return f"{prompt}\nOnly output the answer, no other information.\nANSWER: "
 
 def python_interpreter_wrap(prompt: str, inputs: List) -> str:
     return (
